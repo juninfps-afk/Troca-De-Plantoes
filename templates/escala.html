@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Escala de plantões</h1>
+    <p>Plantões da equipe {{ usuario['empresa'] }}.</p>
+
+    {% if usuario['perfil'] == 'supervisor' %}
+        <a class="botao" href="{{ url_for('novo_plantao') }}">Cadastrar plantão</a>
+    {% endif %}
+
+    {% if plantoes %}
+        <div class="tabela-wrap">
+            <table>
+                <thead>
+                    <tr><th>Funcionário</th><th>Início</th><th>Término</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in plantoes %}
+                        <tr>
+                            <td>{{ p['funcionario_nome'] }}{% if p['funcionario_id'] == usuario['id'] %} <strong>(seu)</strong>{% endif %}</td>
+                            <td>{{ p['inicio']|data_hora }}</td>
+                            <td>{{ p['termino']|data_hora }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>Ainda não há plantões cadastrados.</p>
+    {% endif %}
+{% endblock %}

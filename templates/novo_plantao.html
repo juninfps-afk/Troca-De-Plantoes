@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="form-box">
+        <h1>Novo plantão</h1>
+        {% if funcionarios %}
+            <form method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <label for="funcionario_id">Funcionário</label>
+                <select id="funcionario_id" name="funcionario_id" required>
+                    <option value="">Selecione</option>
+                    {% for f in funcionarios %}
+                        <option value="{{ f['id'] }}">{{ f['nome'] }} ({{ f['login'] }})</option>
+                    {% endfor %}
+                </select>
+                <label for="inicio">Início</label>
+                <input id="inicio" name="inicio" type="datetime-local" required>
+                <label for="termino">Término</label>
+                <input id="termino" name="termino" type="datetime-local" required>
+                <button class="botao" type="submit">Salvar plantão</button>
+            </form>
+        {% else %}
+            <p>Cadastre um funcionário antes de criar um plantão.</p>
+            <a href="{{ url_for('novo_funcionario') }}">Cadastrar funcionário</a>
+        {% endif %}
+    </section>
+{% endblock %}

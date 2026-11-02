@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Troca de Plantões{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <a class="marca" href="{{ url_for('inicio') }}">⇄ Troca de Plantões</a>
+        {% if g.usuario is defined and g.usuario %}
+            <nav>
+                <a href="{{ url_for('painel') }}">Painel</a>
+                <a href="{{ url_for('escala') }}">Escala</a>
+                <a href="{{ url_for('trocas') }}">Trocas</a>
+                <form method="post" action="{{ url_for('sair') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="link" type="submit">Sair</button>
+                </form>
+            </nav>
+        {% endif %}
+    </header>
+
+    <main class="container">
+        {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+            <p class="alerta {{ categoria }}" role="status">{{ mensagem }}</p>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>Projeto acadêmico · Troca de Plantões</footer>
+</body>
+</html>

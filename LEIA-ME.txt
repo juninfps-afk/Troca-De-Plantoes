@@ -1,0 +1,50 @@
+TROCA DE PLANTÕES — VERSÃO SIMPLIFICADA
+
+REQUISITOS
+- Python 3.11 ou mais recente
+
+INSTALAÇÃO NO WINDOWS
+1. Extraia esta pasta.
+2. Abra o terminal dentro da pasta do projeto.
+3. (Opcional, recomendado) Crie um ambiente virtual:
+   py -m venv .venv
+   .venv\Scripts\activate
+4. Instale as bibliotecas:
+   py -m pip install -r requirements.txt
+5. Crie o primeiro supervisor:
+   py criar_supervisor.py
+   Informe nome, usuário, empresa/equipe e uma senha de 15 a 128 caracteres.
+6. Inicie o sistema:
+   py app.py
+7. Abra http://127.0.0.1:5000 no navegador.
+
+COMO USAR
+- O supervisor cadastra funcionários e plantões.
+- Funcionários consultam a escala e enviam pedidos de troca.
+- O funcionário que receber o pedido aceita ou recusa.
+- Se aceitar, o supervisor aprova ou recusa.
+- A escala só muda depois da aprovação do supervisor.
+- Só podem ser trocados plantões que ainda não começaram e que tenham a mesma duração.
+- Quem pediu a troca pode cancelá-la enquanto ela estiver pendente.
+- O supervisor consulta os registros de ações em "Ver registros de ações" no painel.
+
+SEGURANÇA
+- Senhas são armazenadas com hash scrypt.
+- Formulários usam proteção CSRF.
+- Login tem limite de tentativas por IP.
+- Sessões usam tokens aleatórios; o banco guarda somente o hash e expiração de 30 minutos.
+- Acesso de supervisor é verificado no servidor.
+- Login, logout, cadastros, trocas, decisões e acessos negados ficam registrados (a senha nunca é gravada).
+- Os registros não podem ser alterados nem apagados (o banco bloqueia).
+- Consultas SQL usam parâmetros.
+- Os dados são separados pelo nome da empresa/equipe.
+- A chave secreta é criada automaticamente no primeiro início e guardada em instance/chave_secreta.txt.
+
+TESTES
+- Para rodar os testes automáticos: py testes.py
+- Eles usam um banco temporário e não mexem nos seus dados.
+
+NOTAS
+- Esta é uma versão acadêmica para execução local, não uma implantação de produção.
+- Para hospedar com HTTPS, altere SESSION_COOKIE_SECURE para True e use um servidor WSGI adequado.
+- O banco desta nova versão começa vazio para não copiar contas ou sessões antigas. O ZIP original continua separado como sua cópia anterior.

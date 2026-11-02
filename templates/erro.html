@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="form-box">
+        <h1>Acesso negado</h1>
+        <p>{{ mensagem }}</p>
+        <a href="{{ url_for('painel') }}">Voltar ao painel</a>
+    </section>
+{% endblock %}

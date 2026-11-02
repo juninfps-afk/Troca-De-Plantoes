@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Trocas de plantões</h1>
+
+    {% if usuario['perfil'] == 'funcionario' %}
+        <section class="form-box">
+            <h2>Solicitar uma troca</h2>
+            <form method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <label for="meu_plantao">Meu plantão</label>
+                <select id="meu_plantao" name="meu_plantao" required>
+                    <option value="">Selecione seu plantão</option>
+                    {% for p in plantoes if p['funcionario_id'] == usuario['id'] and p['inicio'] > agora %}
+                        <option value="{{ p['id'] }}">
+                            {{ p['inicio']|data_hora }} – {{ p['termino']|data_hora }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label for="plantao_colega">Plantão do colega</label>
+                <select id="plantao_colega" name="plantao_colega" required>
+                    <option value="">Selecione o plantão do colega</option>
+                    {% for p in plantoes if p['funcionario_id'] != usuario['id'] and p['inicio'] > agora %}
+                        <option value="{{ p['id'] }}">
+                            {{ p['funcionario_nome'] }}: {{ p['inicio']|data_hora }} – {{ p['termino']|data_hora }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button class="botao" type="submit">Enviar solicitação</button>
+            </form>
+        </section>
+    {% endif %}
+
+    <h2>Solicitações</h2>
+
+    {% if trocas %}
+        <div class="lista">
+            {% for t in trocas %}
+                <article class="item">
+                    <p>
+                        <strong>{{ t['nome_a'] }}</strong>
+                        ({{ t['inicio_a']|data_hora }} – {{ t['termino_a']|data_hora }})
+                        ⇄
+                        <strong>{{ t['nome_b'] }}</strong>
+                        ({{ t['inicio_b']|data_hora }} – {{ t['termino_b']|data_hora }})
+                    </p>
+                    <p>
+                        Status:
+                        <strong>{{ t['status']|nome_status }}</strong>
+                    </p>
+                    {% if usuario['id'] == t['colega_id'] and t['status'] == 'aguardando_colega' %}
+                        <form method="post" action="{{ url_for('responder', troca_id=t['id']) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button name="resposta" value="aceitar" class="botao">Aceitar</button>
+                            <button name="resposta" value="recusar" class="botao secundario">Recusar</button>
+                        </form>
+                    {% endif %}
+                    {% if usuario['id'] == t['solicitante_id'] and t['status'] in ('aguardando_colega', 'aguardando_supervisor') %}
+                        <form method="post" action="{{ url_for('cancelar', troca_id=t['id']) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="botao secundario">Cancelar solicitação</button>
+                        </form>
+                    {% endif %}
+                    {% if usuario['perfil'] == 'supervisor' and t['status'] == 'aguardando_supervisor' %}
+                        <form method="post" action="{{ url_for('decidir', troca_id=t['id']) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button name="decisao" value="aprovar" class="botao">Aprovar troca</button>
+                            <button name="decisao" value="recusar" class="botao secundario">Recusar</button>
+                        </form>
+                    {% endif %}
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Nenhuma solicitação de troca.</p>
+    {% endif %}
+{% endblock %}

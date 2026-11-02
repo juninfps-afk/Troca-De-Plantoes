@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="hero">
+        <p class="tag">ESCALAS E TROCAS</p>
+        <h1>Organize sua escala de plantões.</h1>
+        <p>Consulte horários, solicite trocas e acompanhe as decisões em um só lugar.</p>
+        <a class="botao" href="{{ url_for('login') }}">Acessar minha conta</a>
+    </section>
+
+    <section class="grade">
+        <article>
+            <h2>1. Solicite</h2>
+            <p>Escolha um plantão seu e o de um colega.</p>
+        </article>
+        <article>
+            <h2>2. Combine</h2>
+            <p>O colega aceita ou recusa o pedido.</p>
+        </article>
+        <article>
+            <h2>3. Aprove</h2>
+            <p>O supervisor decide e a escala só muda após aprovação.</p>
+        </article>
+    </section>
+{% endblock %}

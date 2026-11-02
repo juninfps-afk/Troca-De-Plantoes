@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p class="tag">ÁREA DA EQUIPE</p>
+    <h1>Olá, {{ usuario['nome'] }}!</h1>
+    <p>Empresa/equipe: {{ usuario['empresa'] }}</p>
+
+    <section class="grade painel-acoes">
+        <article class="cartao-acao cartao-escala">
+            <div class="icone-acao" aria-hidden="true">▦</div>
+            <h2>Escala</h2>
+            <p>Consulte os plantões da equipe.</p>
+            <a class="acao-link link-escala" href="{{ url_for('escala') }}">
+                <span>Abrir escala</span>
+                <span class="seta-acao" aria-hidden="true">→</span>
+            </a>
+        </article>
+        <article class="cartao-acao cartao-trocas">
+            <div class="icone-acao" aria-hidden="true">⇄</div>
+            <h2>Trocas</h2>
+            <p>Solicite ou acompanhe uma troca.</p>
+            <a class="acao-link link-trocas" href="{{ url_for('trocas') }}">
+                <span>Abrir trocas</span>
+                <span class="seta-acao" aria-hidden="true">→</span>
+            </a>
+        </article>
+        {% if usuario['perfil'] == 'supervisor' %}
+            <article class="cartao-acao cartao-equipe">
+                <div class="icone-acao" aria-hidden="true">♙</div>
+                <h2>Gerenciar equipe</h2>
+                <p>Cadastre funcionários e plantões e consulte os registros.</p>
+                <div class="acoes-cadastro">
+                    <a class="acao-link link-cadastro" href="{{ url_for('novo_funcionario') }}">
+                        <span>Cadastrar funcionário</span>
+                        <span class="seta-acao" aria-hidden="true">→</span>
+                    </a>
+                    <a class="acao-link link-cadastro-secundario" href="{{ url_for('novo_plantao') }}">
+                        <span>Cadastrar plantão</span>
+                        <span class="seta-acao" aria-hidden="true">→</span>
+                    </a>
+                    <a class="acao-link link-cadastro-secundario" href="{{ url_for('registros') }}">
+                        <span>Ver registros de ações</span>
+                        <span class="seta-acao" aria-hidden="true">→</span>
+                    </a>
+                </div>
+            </article>
+        {% endif %}
+    </section>
+{% endblock %}

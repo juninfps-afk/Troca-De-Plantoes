@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Registros · Troca de Plantões{% endblock %}
+
+{% block content %}
+    <h1>Registros de ações</h1>
+    <p>Últimas ações feitas pela equipe {{ g.usuario['empresa'] }}. Esta lista só pode ser consultada, nunca editada.</p>
+
+    {% if registros %}
+        <div class="tabela-wrap">
+            <table>
+                <thead>
+                    <tr><th>Data e hora</th><th>Usuário</th><th>Ação</th><th>Item</th><th>Resultado</th></tr>
+                </thead>
+                <tbody>
+                    {% for r in registros %}
+                        <tr>
+                            <td>{{ r['criado_em']|data_hora(' ') }}</td>
+                            <td>{{ r['ator'] }}</td>
+                            <td>{{ r['acao'] }}</td>
+                            <td>{{ r['referencia'] }}</td>
+                            <td class="{{ 'res-ok' if r['resultado'].startswith('sucesso') else 'res-falha' }}">{{ r['resultado'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>Ainda não há registros.</p>
+    {% endif %}
+{% endblock %}
